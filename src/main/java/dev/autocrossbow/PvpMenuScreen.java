@@ -65,13 +65,16 @@ public class PvpMenuScreen extends Screen {
         private final BooleanSupplier enabled;
 
         ModuleButton(int x, int y, int w, int h, String name, BooleanSupplier enabled, Runnable onClick) {
-            super(x, y, w, h, Text.literal(name), b -> onClick.run(), DEFAULT_NARRATION_SUPPLIER);
+            // Fully qualified: inside a ButtonWidget the short name "Text" means a nested class.
+            super(x, y, w, h, net.minecraft.text.Text.literal(name), b -> onClick.run(), DEFAULT_NARRATION_SUPPLIER);
             this.name = name;
             this.enabled = enabled;
+            // Hide the vanilla grey button texture; we draw everything ourselves in drawIcon.
+            this.setAlpha(0.0F);
         }
 
         @Override
-        protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        protected void drawIcon(DrawContext context, int mouseX, int mouseY, float delta) {
             boolean on = enabled.getAsBoolean();
             int x = this.getX();
             int y = this.getY();
